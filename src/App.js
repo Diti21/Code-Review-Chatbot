@@ -34,7 +34,7 @@ export default function App() {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:5000/api/review', {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/review`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ code, language }),
