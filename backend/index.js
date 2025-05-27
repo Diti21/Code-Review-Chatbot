@@ -5,10 +5,6 @@ import dotenv from 'dotenv';
 import rateLimit from 'express-rate-limit';
 import { marked } from 'marked';
 
-// After getting the review string
-const markdownHtml = marked(review); // Converts markdown to HTML
-res.json({ review: markdownHtml, raw: review });
-
 dotenv.config();
 
 const app = express();
@@ -80,7 +76,13 @@ app.post('/api/review', async (req, res) => {
 
   try {
     const review = await getFullReview(prompt);
-    res.json({ review });
+
+    // Convert markdown review to HTML here
+    const markdownHtml = marked(review);
+
+    // Send both raw markdown and HTML converted review
+    res.json({ review: markdownHtml, raw: review });
+
   } catch (error) {
     res.status(500).json({ error: error.message || 'Something went wrong' });
   }
