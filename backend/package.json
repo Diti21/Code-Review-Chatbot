@@ -13,7 +13,9 @@
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
-    "node-fetch": "^3.3.2"
+    "express-rate-limit": "^7.5.0",
+    "node-fetch": "^3.3.2",
+    "openai": "^4.103.0"
   },
   "description": ""
 }

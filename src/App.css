@@ -36,3 +36,8 @@
     transform: rotate(360deg);
   }
 }
+.review-container {
+  max-height: 80vh;
+  overflow-y: auto;
+  white-space: pre-wrap;
+}

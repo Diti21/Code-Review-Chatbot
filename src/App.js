@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { marked } from 'marked';
 
 export default function App() {
   const [code, setCode] = useState('');
@@ -6,6 +7,22 @@ export default function App() {
   const [review, setReview] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [tokenWarning, setTokenWarning] = useState('');
+
+  const TOKEN_LIMIT = 3000;
+
+  function handleCodeChange(e) {
+    const val = e.target.value;
+    if (val.length > TOKEN_LIMIT) {
+      setTokenWarning(
+        `Warning: Code truncated to ${TOKEN_LIMIT} characters to fit token limit.`
+      );
+      setCode(val.slice(0, TOKEN_LIMIT));
+    } else {
+      setTokenWarning('');
+      setCode(val);
+    }
+  }
 
   async function handleReview() {
     if (!code.trim()) {
@@ -33,6 +50,17 @@ export default function App() {
       setError('Failed to connect to the server.');
     }
     setLoading(false);
+  }
+
+  function handleDownload() {
+    if (!review) return;
+    const blob = new Blob([review], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'code-review.txt';
+    a.click();
+    URL.revokeObjectURL(url);
   }
 
   return (
@@ -88,7 +116,7 @@ export default function App() {
         rows={12}
         placeholder="Paste your code here..."
         value={code}
-        onChange={(e) => setCode(e.target.value)}
+        onChange={handleCodeChange}
         style={{
           width: '100%',
           padding: '15px',
@@ -98,10 +126,15 @@ export default function App() {
           border: '1px solid #ccc',
           resize: 'vertical',
           minHeight: '250px',
-          marginBottom: '20px',
+          marginBottom: '5px',
           boxSizing: 'border-box',
         }}
       />
+      {tokenWarning && (
+        <p style={{ color: '#e07c00', marginBottom: '20px', fontWeight: '600' }}>
+          {tokenWarning}
+        </p>
+      )}
 
       <button
         onClick={handleReview}
@@ -145,7 +178,6 @@ export default function App() {
             backgroundColor: '#f8f9fa',
             borderLeft: '6px solid #007bff',
             borderRadius: '12px',
-            whiteSpace: 'pre-wrap',
             fontFamily: 'monospace',
             color: '#1e1e1e',
             boxShadow: 'inset 0 0 10px rgba(0, 0, 0, 0.03)',
@@ -156,7 +188,27 @@ export default function App() {
           }}
         >
           <h3 style={{ marginBottom: '20px', color: '#007bff' }}>🔍 Review Result</h3>
-          <pre style={{ margin: 0, fontSize: '15px', overflowX: 'auto' }}>{review}</pre>
+
+          <div
+            style={{ margin: 0, fontSize: '15px', overflowX: 'auto' }}
+            dangerouslySetInnerHTML={{ __html: marked(review) }}
+          />
+
+          <button
+            onClick={handleDownload}
+            style={{
+              marginTop: '20px',
+              padding: '10px 20px',
+              fontSize: '16px',
+              borderRadius: '6px',
+              border: 'none',
+              backgroundColor: '#28a745',
+              color: 'white',
+              cursor: 'pointer',
+            }}
+          >
+            📥 Download Review as .txt
+          </button>
         </div>
       )}
     </div>
