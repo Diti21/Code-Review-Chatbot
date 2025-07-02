@@ -1,6 +1,6 @@
-#  CodeReviewGPT
+#  Code-Review-Chatbot
 
-**CodeReviewGPT** is a full-stack web application that uses OpenAI's GPT-4o model to provide intelligent, real-time code reviews. Simply paste your code, choose the programming language, and get structured, markdown-formatted suggestions, bug fixes, and best practice insights.
+**Code-Review-Chatbot** is a full-stack web application that uses OpenAI's GPT-4o model to provide intelligent, real-time code reviews. Simply paste your code, choose the programming language, and get structured, markdown-formatted suggestions, bug fixes, and best practice insights.
 
 ---
 
